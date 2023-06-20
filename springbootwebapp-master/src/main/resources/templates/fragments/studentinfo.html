@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+        rel="stylesheet" media="screen"/>
+  <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+          th:src="@{/webjars/jquery/2.1.4/jquery.min.js}">
+  </script>
+
+
+  <div id="nav-placeholder">
+
+  </div>
+
+  <script>
+$(function(){
+  $("#nav-placeholder").load("studentnav.html");
+});
+</script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+
+  <form>
+
+    <div class="imgcontainer">
+      <img src="/images/avatar.png" alt="Avatar" height="300" width="300">
+    </div>
+
+
+    <div class="form-group" >
+      <label for="Studentid" class="label-left">Student ID:</label>
+      <input name="Studentid" value="0001" id="Studentid" class="input-left" readonly/>
+    </div>
+    <div class="form-group" >
+      <label for="Studentname" class="label-left">Student name:</label>
+      <input name="Studentname" value="Hoang hung" id="Studentname" class="input-left" readonly/>
+    </div>
+    <div class="form-group" >
+      <label for="Studentdob" class="label-left">Student birthday:</label>
+      <input name="Studentdob" value="20/10/2000" id="Studentdob" class="input-left" readonly/>
+    </div>
+    <div class="form-group" >
+      <label for="Studentstatus" class="label-left">Student status:</label>
+      <input name="Studentstatus" value="is study" id="Studentstatus" class="input-left" readonly/>
+    </div>
+
+  </form>
+</div>
+</body>
+</html>

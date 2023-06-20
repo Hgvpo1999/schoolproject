@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <title>Spring Framework Guru</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(teachers)}">
+        <div>
+            <form th:action="@{/teacher/p/1}">
+                <input type="hidden" name="sortField" th:value="${sortField}"/>
+                <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                Filter:
+                <input type="text" name="keyword" th:value="${keyword}"/>
+                &nbsp;
+                <label >subject:</label>
+                <select type="text" name="subject" th:value="${subject}">
+                    <option value="">All</option>
+                    <option value="M01">Math</option>
+                    <option value="E01">English</option>
+                    <option value="P01">Physics</option>
+                    <option value="B01">Biology</option>
+                    <option value="C01">Chemistry</option>
+                </select>
+                <label >homeroom:</label>
+                <select type="text" name="homeroom" th:value="${homeroom}">
+                    <option value="">All</option>
+                    <option value="1">YES</option>
+                    <option value="0">NO</option>
+                </select>
+<!--                <label>Student Class:</label>-->
+<!--                <select type="text" name="subject" th:value="${subject}">-->
+<!--                    <option value="">All</option>-->
+<!--                    <option th:each="class : ${classes}"-->
+<!--                            th:value="${class.classid}"-->
+<!--                            th:text="${class.subject}"></option>-->
+<!--                </select>-->
+                &nbsp;
+                <input type="submit" value="Search"/>
+                &nbsp;
+            </form>
+        </div>
+
+        <h2>Teacher List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th><a th:href="@{'/teacher/p/' + ${currentPage} + '?sortField=teacherid&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subject != null ? '&subject=' + subject : ''} + ${homeroom != null ? '&homeroom=' + homeroom: ''}}">
+                    Id</a></th>
+                <th><a th:href="@{'/teacher/p/' + ${currentPage} + '?sortField=teachername&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subject != null ? '&subject=' + subject : ''} + ${homeroom != null ? '&homeroom=' + homeroom: ''}}">
+                    student name</a></th>
+                <th><a th:href="@{'/teacher/p/' + ${currentPage} + '?sortField=teacherdob&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subject != null ? '&subject=' + subject : ''} + ${homeroom != null ? '&homeroom=' + homeroom: ''}}">
+                    student dob</a></th>
+                <th><a th:href="@{'/teacher/p/' + ${currentPage} + '?sortField=teachergender&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subject != null ? '&subject=' + subject : ''} + ${homeroom != null ? '&homeroom=' + homeroom: ''}}">
+                    student gender</a></th>
+                <th th:if="${#request.isUserInRole('ADMIN')}">Cho GV day lop</th>
+                <th>List Class</th>
+                <th th:unless="${#request.isUserInRole('STUDENT')}">View Score</th>
+                <th>View</th>
+                <th th:if="${#request.isUserInRole('ADMIN')}">Edit</th>
+                <th th:if="${#request.isUserInRole('ADMIN')}">Delete</th>
+            </tr>
+            <tr th:each="teacher : ${teachers}">
+                <td th:text="${teacher.teacherid}"><a href="/teacher/${teacher.teacherid}">Id</a></td>
+                <td th:text="${teacher.teachername}">student name</td>
+                <td th:text="${teacher.teacherdob}">student dob</td>
+                <td th:text="${teacher.teachergender}">student gender</td>
+                <td th:if="${#request.isUserInRole('ADMIN')}">
+                    <a th:if="${#request.isUserInRole('ADMIN')}"
+                       th:href="${'/teacher/class/add/' + teacher.teacherid}">Cho GV day lop</a></td>
+                <td><a th:href="${'/teacher/class/' + teacher.teacherid}">List Class</a></td>
+                <td th:unless="${#request.isUserInRole('STUDENT')}">
+                    <a th:if="(${#request.isUserInRole('TEACHER')} and ${teacher.teacherid == T(java.lang.Integer).parseInt(principal.getName())}) or ${#request.isUserInRole('ADMIN')}"
+                       th:href="${'/score/teacher/' + teacher.teacherid}">View Score</a></td>
+                <td><a th:if="(${#request.isUserInRole('TEACHER')} and ${teacher.teacherid == T(java.lang.Integer).parseInt(principal.getName())}) or ${#request.isUserInRole('ADMIN')}"
+                       th:href="${'/teacher/' + teacher.teacherid}">View</a></td>
+                <td th:if="${#request.isUserInRole('ADMIN')}">
+                    <a th:if="${#request.isUserInRole('ADMIN')}" th:href="${'/teacher/edit/' + teacher.teacherid}">Edit</a></td>
+                <td th:if="${#request.isUserInRole('ADMIN')}">
+                    <a th:if="${#request.isUserInRole('ADMIN')}" th:href="${'/teacher/delete/' + teacher.teacherid}">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+    <button> <a th:if="${#request.isUserInRole('ADMIN')}" href="#" th:href="@{/teacher/new}"> ADD TEACHER </a></button>
+    <div>
+        Total Items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]
+        &nbsp; - &nbsp;
+        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${i != currentPage}" th:href="@{'/teacher/p/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subject != null ? '&subject=' + subject : ''} ">[[${i}]]</a> &nbsp;&nbsp;
+            <span th:unless="${i != currentPage}">[[${i}]]</span> &nbsp;&nbsp;
+        </span>
+    </div>
+</div>
+</body>
+</html>

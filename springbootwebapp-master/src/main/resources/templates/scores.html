@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-paginator/1.4.1/css/bootstrap-paginator.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-paginator/1.4.1/js/bootstrap-paginator.min.js"></script>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+<!--    <div class="container">-->
+        <h2>Score List</h2>
+        <form th:action="@{/score/p/1}">
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+            Filter:
+            <input type="text" name="keyword" th:value="${keyword}"/>
+            &nbsp;
+            <label>Subject:</label>
+            <select name="subjectId">
+                <option value="0" th:selected="${subjectId == null || subjectId == '0'}">ALL</option>
+                <option value="M01" th:selected="${subjectId == 'M01'}">MATH</option>
+                <option value="B01" th:selected="${subjectId == 'B01'}">BIOLOGY</option>
+                <option value="C01" th:selected="${subjectId == 'C01'}">CHEMISTRY</option>
+                <option value="E01" th:selected="${subjectId == 'E01'}">ENGLISH</option>
+                <option value="P01" th:selected="${subjectId == 'P01'}">PHYSICS</option>
+                <option value="L01" th:selected="${subjectId == 'L01'}">LITERATURE</option>
+            </select>
+            &nbsp;
+            <input type="submit" value="Search"/>
+            &nbsp;
+        </form>
+        <table class="table table-striped">
+            <tr>
+                <th><a th:href="@{'/score/p/' + ${currentPage} + '?sortField=studentId&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subjectId != null ? '&subjectId=' + subjectId : ''}}">
+                    Student Id</a></th>
+                <th>Subject Id</th>
+                <th><a th:href="@{'/score/p/' + ${currentPage} + '?sortField=midScore&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subjectId != null ? '&subjectId=' + subjectId : ''}}">
+                    Middle Score</a></th>
+                <th><a th:href="@{'/score/p/' + ${currentPage} + '?sortField=finalScore&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subjectId != null ? '&subjectId=' + subjectId : ''}}">
+                FInal Score</a></th>
+                <th><a th:href="@{'/score/p/' + ${currentPage} + '?sortField=averageScore&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subjectId != null ? '&subjectId=' + subjectId : ''}}">
+                    Average Score</a></th>
+                <th th:if="${#request.isUserInRole('ADMIN')}">ACTION</th>
+            </tr>
+            <tr th:each="score : ${scores}">
+                <form th:action="@{/score/save}" method="post">
+                    <input type="hidden" name="scoreId" th:value="${score.scoreId}" />
+                    <td th:text="${score.studentId}"></td>
+                    <td th:text="${score.subjectId}"></td>
+                    <td>
+                        <input type="number" step="0.1" min="0.0" max="10.0" name="midScore" th:value="${score.midScore}" />
+                    </td>
+                    <td>
+                        <input type="number" step="0.1" min="0.0" max="10.0" name="finalScore" th:value="${score.finalScore}" />
+                    </td>
+                    <td th:text="${score.averageScore}"></td>
+                    <td>
+                        <button type="submit" th:if="${#request.isUserInRole('ADMIN')}">Save</button>
+                    </td>
+                </form>
+            </tr>
+        </table>
+        <div>
+            Total Items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]
+            &nbsp; - &nbsp;
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${i != currentPage}" th:href="@{'/score/p/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${subjectId != null ? '&subjectId=' + subjectId : ''} ">[[${i}]]</a> &nbsp;&nbsp;
+            <span th:unless="${i != currentPage}">[[${i}]]</span> &nbsp;&nbsp;
+        </span>
+        </div>
+<!--    </div>-->
+</div>
+<script>
+        $(document).ready(function() {
+          $('.score-form').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var scoreId = form.find('input[name="scoreId"]').val();
+            var midScore = form.find('input[name="midScore"]').val();
+            var finalScore = form.find('input[name="finalScore"]').val();
+            var messageElement = form.siblings('.message');
+
+            $.ajax({
+              type: 'POST',
+              url: '/score/save',
+              data: {
+                scoreId: scoreId,
+                midScore: midScore,
+                finalScore: finalScore
+              },
+              success: function(response) {
+                  location.reload();
+                },
+              error: function(xhr) {
+                var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Fail for save';
+                alert(errorMessage);
+              }
+            });
+          });
+        });
+    </script>
+</body>
+</html>

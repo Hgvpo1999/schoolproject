@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+  <title>Spring Framework Guru</title>
+
+  <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+  <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+  <div th:if="${not #lists.isEmpty(classes)}">
+    <div>
+
+    </div>
+    <h2>Student List</h2>
+    <table class="table table-striped">
+      <tr>
+        <th><a >Class Id</a></th>
+        <th><a >Class Name</a></th>
+        <th>Remove class</th>
+      </tr>
+      <tr th:each="classes : ${classes}">
+        <td th:text="${classes.classid}">Class Id</td>
+        <td th:text="${classes.classname}">Class Name</td>
+        <td><a th:if="${#request.isUserInRole('ADMIN')}" th:href="${'/teacher/class/'+ teachers.teacherid +'/' + classes.classid}" th:method="delete"
+        >Remove class</a></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

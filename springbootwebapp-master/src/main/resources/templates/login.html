@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+    <form action="#" th:action="@{/login}" method="post">
+        <table>
+            <tr>
+                <td>User:</td>
+                <td><input type="text" id="username" name="username" required></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" id="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td>Remember me?</td>
+                <td><input type="checkbox" name="remember-me"></td>
+            </tr>
+            <tr>
+                <td><input name="submit" type="submit" value="submit"></td>
+            </tr>
+        </table>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+    <div th:if="${not #lists.isEmpty(scoreClasses)}">
+        <h2>Score List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Student Name</th>
+                <th>Subject Name</th>
+                <th>Mid Score</th>
+                <th>Final Score</th>
+                <th>Average Score</th>
+<!--                <th>Edit</th>-->
+            </tr>
+            <tr th:each="scoreclass : ${scoreClasses}">
+                <td th:text="${scoreclass.studentName}"><a>Student Name</a></td>
+                <td th:text="${scoreclass.subjectName}">Subject Name</td>
+                <td th:text="${scoreclass.midScore}"><a>Mid Score</a></td>
+                <td th:text="${scoreclass.finalScore}"><a>Final Score</a></td>
+                <td th:text="${scoreclass.averageScore}"><a>Average Score</a></td>
+<!--                <td><a >Edit</a></td>-->
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

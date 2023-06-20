@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+
+<body>
+
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+    <div>
+        <h2>Student Info</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Student Id</th>
+                <th>student name</th>
+                <th>student DOB</th>
+                <th>student gender</th>
+                <th>student Score</th>
+                <th>student view</th>
+            </tr>
+            <tr th:each="student : ${students}" th:if="(${#request.isUserInRole('STUDENT')} and ${student.studentid == T(java.lang.Integer).parseInt(principal.getName())}) or ${#request.isUserInRole('ADMIN')} or ${#request.isUserInRole('TEACHER')}">
+                <td th:text="${student.studentid}"></td>
+                <td th:text="${student.studentname}"></td>
+                <td th:text="${student.studentdob}"></td>
+                <td th:text="${student.studentgender}"></td>
+                <td><a th:href="${'/score/student/' + student.studentid}">Score</a></td>
+                <td><a th:href="${'/student/' + student.studentid}">View</a></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

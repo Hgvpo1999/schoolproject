@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+    <h2>SCORE List</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Student Id</th>
+            <th>Student Name</th>
+            <th>Subject Name</th>
+            <th>Mid Score</th>
+            <th>Final Score</th>
+            <th>Average Score</th>
+<!--            <th>ACTION</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacherScore : ${scoreClasses}">
+            <form th:action="@{/score/save}" method="post">
+                <input type="hidden" name="scoreId" th:value="${teacherScore.scoreId}" />
+                <td th:text="${teacherScore.studentId}"></td>
+                <td th:text="${teacherScore.studentName}"></td>
+                <td th:text="${teacherScore.subjectName}"></td>
+                <td>
+                    <input type="number" step="0.1" min="0.0" max="10.0" name="midScore" th:value="${teacherScore.midScore}" />
+                </td>
+                <td>
+                    <input type="number" step="0.1" min="0.0" max="10.0" name="finalScore" th:value="${teacherScore.finalScore}" />
+                </td>
+                <td th:text="${teacherScore.averageScore}"></td>
+                <td>
+<!--                    <button type="submit">Save</button>-->
+                </td>
+            </form>
+            <span class="message"></span>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+        $(document).ready(function() {
+          $('.score-form').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var scoreId = form.find('input[name="scoreId"]').val();
+            var midScore = form.find('input[name="midScore"]').val();
+            var finalScore = form.find('input[name="finalScore"]').val();
+            var messageElement = form.siblings('.message');
+
+            $.ajax({
+              type: 'POST',
+              url: '/score/save',
+              data: {
+                scoreId: scoreId,
+                midScore: midScore,
+                finalScore: finalScore
+              },
+              success: function(response) {
+                  $('#message').text('Score saved successfully');
+                  location.reload();
+                },
+              error: function(xhr) {
+                var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Fail for save';
+                alert(errorMessage);
+              }
+            });
+          });
+        });
+    </script>
+</body>
+</html>

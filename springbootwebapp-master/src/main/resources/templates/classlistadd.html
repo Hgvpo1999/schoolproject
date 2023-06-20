@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+  <title>Spring Framework Guru</title>
+
+  <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+  <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+  <div th:if="${not #lists.isEmpty(students)}">
+    <div>
+
+    </div>
+    <h2>Student List</h2>
+    <table class="table table-striped">
+      <tr>
+        <th><a>Student Id</a></th>
+        <th><a >student name</a></th>
+        <th><a >student dob</a></th>
+        <th><a >student gender</a></th>
+        <th>student status</th>
+        <th>student activate</th>
+        <th>View</th>
+        <th>ADD</th>
+      </tr>
+      <tr th:each="student : ${students}" hx-boost="true">
+        <td th:text="${student.studentid}"><a href="/student/${student.studentid}">Id</a></td>
+        <td th:text="${student.studentname}">student name</td>
+        <td th:text="${student.studentdob}">student dob</td>
+        <td th:text="${student.studentgender}">student gender</td>
+        <td th:text="${student.studentstatus}">student status</td>
+        <td th:text="${student.studentactivate}">student activate</td>
+        <td><a th:href="${'/student/' + student.studentid}">View</a></td>
+        <td><a th:href="${'/classes/viewlist/' + classes.classid +'/add/'+student.studentid + '/' +student.studentactivate}"
+               hx-push-url="${'/classes/viewlist/' + classes.classid +'/add/'}"  th:method="POST">ADD</a></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

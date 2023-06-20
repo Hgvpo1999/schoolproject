@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+    <div th:if="${not #lists.isEmpty(students)}">
+        <div>
+
+        </div>
+        <h2>Student List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th><a >
+                    Id</a></th>
+                <th><a >student name</a></th>
+                <th><a >student dob</a></th>
+                <th><a >student gender</a></th>
+                <th>student status</th>
+                <th>student activate</th>
+                <th>View</th>
+                <th th:if="${#request.isUserInRole('ADMIN')}">Edit</th>
+                <th th:if="${#request.isUserInRole('ADMIN')}">Remove</th>
+            </tr>
+            <tr th:each="student : ${students}" hx-boost="true"
+                hx-push-url="${'/classes/viewlist/' + class.classid}">
+                <td th:text="${student.studentid}"><a href="/student/${student.studentid}">Id</a></td>
+                <td th:text="${student.studentname}">student name</td>
+                <td th:text="${student.studentdob}">student dob</td>
+                <td th:text="${student.studentgender}">student gender</td>
+                <td th:text="${student.studentstatus}">student status</td>
+                <td th:text="${student.studentactivate}">student activate</td>
+                <td><a th:href="${'/student/' + student.studentid}">View</a></td>
+                <td><a th:if="${#request.isUserInRole('ADMIN')}" th:href="${'/student/edit/' + student.studentid}">Edit</a></td>
+                <td th:if="${#request.isUserInRole('ADMIN')}"><a th:href="${'/classes/viewlist/'+ classes.classid +'/'+student.studentid}" th:method="delete"
+                       th:if="${student.studentactivate} == '0'">Remove</a></td>
+            </tr>
+        </table>
+    </div>
+    <button th:if="${#request.isUserInRole('ADMIN')}"> <a href="#" th:href="${'/classes/viewlist/' + classes.classid + '/add'}" th:method="get"> ADD STUDENT TO CLASS</a></button>
+
+</div>
+</body>
+</html>

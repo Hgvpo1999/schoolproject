@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head lang="en">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+        rel="stylesheet" media="screen"/>
+
+  <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+          th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .navbar {
+      margin-bottom: 20px;
+      background-color: #333;
+      border-color: #333;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .navbar-nav > li > a {
+      color: #fff;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-nav > li > a:hover {
+      color: #f8f8f8;
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+  </style>
+
+</head>
+<body>
+<nav>
+  <div class="container">
+    <div th:fragment="header">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li th:unless="${#request.isUserInRole('STUDENT')}"><a href="#" th:href="@{/students}">Student</a></li>
+              <li th:if="${#request.isUserInRole('STUDENT')}"><a href="#" th:href="@{/studentinfo}">Student Info</a></li>
+              <li th:unless="${#request.isUserInRole('STUDENT')}"><a href="#" th:href="@{/teachers}">Teacher</a></li>
+              <li sec:authorize="hasRole('ADMIN')"><a href="#" th:href="@{/classes}">Class</a></li>
+              <li><a href="#" th:href="@{/studentclass}">Student Class</a></li>
+              <li th:unless="${#request.isUserInRole('STUDENT')}"><a href="#" th:href="@{/scores}" >Score</a></li>
+              <li><a href="#" th:href="@{/logout}" >Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</nav>
+</body>
+</html>

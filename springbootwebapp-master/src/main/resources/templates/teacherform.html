@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+  <title>Spring Framework Guru</title>
+
+  <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+  <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+  <h2>Teacher Details</h2>
+  <div>
+    <form class="form-horizontal" th:object="${teacher}" th:action="@{/teacher}" method="post">
+      <input type="hidden" th:field="*{teacherid}"/>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher Id:</label>
+        <p class="form-control-static" th:text="${teacher.teacherid}">Teacher ID</p></div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher Name:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" th:field="*{teachername}" required/>&nbsp;
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher DOB:</label>
+        <div class="col-sm-10">
+          <input type="date" class="form-control" th:field="*{teacherdob}" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher Gender:</label>
+        <div class="col-sm-10">
+          <select th:field="*{teachergender}">
+            <option th:value="'Male'" th:text="Male"></option>
+            <option th:value="'Female'" th:text="Female"></option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher address:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" th:field="*{teacheraddress}"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher mail:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" th:field="*{teachermail}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher Subject:</label>
+        <div class="col-sm-10">
+          <select th:field="*{teachersubject}">
+            <option th:value="'M01'" th:text="Math"></option>
+            <option th:value="'E01'" th:text="English"></option>
+            <option th:value="'C01'" th:text="Chemistry"></option>
+            <option th:value="'B01'" th:text="Biology"></option>
+            <option th:value="'L01'" th:text="Literature"></option>
+            <option th:value="'P01'" th:text="Physics"></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">teacher homeroom:</label>
+        <div class="col-sm-10">
+          <select th:field="*{teacherhomeroom}">
+            <option th:value="0" th:text="No"></option>
+            <option th:value="1" th:text="Yes"></option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

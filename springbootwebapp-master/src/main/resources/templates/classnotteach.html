@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+    <div th:if="${not #lists.isEmpty(classes)}">
+        <div>
+
+        </div>
+        <h2>Class Not Teach List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th><a >Class Id</a></th>
+                <th><a >Class name</a></th>
+                <th>Teacher Class</th>
+            </tr>
+            <tr th:each="class : ${classes}" hx-boost="true" th:method="post">
+                <td th:text="${class.classid}"><a>Class Id</a></td>
+                <td th:text="${class.classname}">student name</td>
+                <td><a th:href="${'/teacher/class/add/' + teachers.teacherid + '/' + class.classid}"
+                       hx-push-url="${'/class/add/' + teacher.teacherid}" th:method="post">Add to Teach</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

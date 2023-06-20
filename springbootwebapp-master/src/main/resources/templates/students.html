@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+
+</head>
+<body>
+
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+        <div th:if="${not #lists.isEmpty(students)}">
+            <div>
+                <form th:action="@{/student/p/1}">
+                    <input type="hidden" name="sortField" th:value="${sortField}"/>
+                    <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+                    Filter:
+                    <input type="text" name="keyword" th:value="${keyword}"/>
+                    &nbsp;
+                    <label >Status:</label>
+                    <select type="text" name="status" th:value="${status}">
+                        <option value="">All</option>
+                        <option value="Is studying">Is studying</option>
+                        <option value="Drop">Drop</option>
+                        <option value="Graduated">Graduated</option>
+                    </select>
+                    &nbsp;
+                    <label>Student Class:</label>
+                        <select type="text" name="classname" th:value="${classname}">
+                            <option value="">All</option>
+                            <option th:each="class : ${classes}"
+                                    th:value="${class.classid}"
+                                    th:text="${class.classname}"></option>
+                        </select>
+                    &nbsp;
+                    <input type="submit" value="Search"/>
+                    &nbsp;
+                </form>
+            </div>
+
+            <h2>Student List</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th><a th:href="@{'/student/p/' + ${currentPage} + '?sortField=studentid&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${status != null ? '&status=' + status: ''}+ ${classname != null ? '&classname=' + classname : ''}}">
+                        Id</a></th>
+                    <th><a th:href="@{'/student/p/' + ${currentPage} + '?sortField=studentname&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${status != null ? '&status=' + status: ''}+ ${classname != null ? '&classname=' + classname : ''}}">
+                        student name</a></th>
+                    <th><a th:href="@{'/student/p/' + ${currentPage} + '?sortField=studentdob&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${status != null ? '&status=' + status: ''}+ ${classname != null ? '&classname=' + classname : ''}}">
+                        student dob</a></th>
+                    <th><a th:href="@{'/student/p/' + ${currentPage} + '?sortField=studentgender&sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${status != null ? '&status=' + status: ''}+ ${classname != null ? '&classname=' + classname : ''}}">
+                        student gender</a></th>
+                    <th>Score</th>
+                    <th>View</th>
+                    <th th:if="${#request.isUserInRole('ADMIN')}" >Edit</th>
+                    <th th:if="${#request.isUserInRole('ADMIN')}" >Delete</th>
+                </tr>
+                <tr th:each="student : ${students}" th:if="(${#request.isUserInRole('STUDENT')} and ${student.studentid == T(java.lang.Integer).parseInt(principal.getName())}) or ${#request.isUserInRole('ADMIN')} or ${#request.isUserInRole('TEACHER')}">
+                    <td th:text="${student.studentid}">
+                        <a href="/student/${student.studentid}">Student Id</a>
+                    </td>
+                    <td th:text="${student.studentname}">student name</td>
+                    <td th:text="${student.studentdob}">student dob</td>
+                    <td th:text="${student.studentgender}">student gender</td>
+                    <td>
+                        <a th:href="${'/score/student/' + student.studentid}">Score</a>
+                    </td>
+                    <td>
+                        <a th:href="${'/student/' + student.studentid}">View</a>
+                    </td>
+                    <td th:if="${#request.isUserInRole('ADMIN')}">
+                        <a th:if="${#request.isUserInRole('ADMIN')}" th:href="${'/student/edit/' + student.studentid}">Edit</a>
+                    </td>
+                    <td th:if="${#request.isUserInRole('ADMIN')}">
+                        <a th:if="${#request.isUserInRole('ADMIN')}" th:href="${'/student/delete/' + student.studentid}">Delete</a>
+                    </td>
+                </tr>
+            </table>
+    </div>
+    <button th:if="${#request.isUserInRole('ADMIN')}">
+        <a th:if="${#request.isUserInRole('ADMIN')}" href="#" th:href="@{/student/new}"> ADD STUDENT </a></button>
+    <div>
+        Total Items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]
+        &nbsp; - &nbsp;
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${i != currentPage}" th:href="@{'/student/p/' + ${i}} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${status != null ? '&status=' + status : ''} ">[[${i}]]</a> &nbsp;&nbsp;
+            <span th:unless="${i != currentPage}">[[${i}]]</span> &nbsp;&nbsp;
+        </span>
+    </div>
+</div>
+</body>
+</html>

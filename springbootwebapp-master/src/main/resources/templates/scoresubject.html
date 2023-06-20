@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/adminnav :: header"></th:block> /*/-->
+
+    <!--    <button th:href="${'score/class/' + classes.classid}">SCORE CLASS</button>-->
+
+    <div th:if="${not #lists.isEmpty(subjects)}">
+        <form th:action="@{'/score/student/' + subject.subjectId}">
+            <select >
+                <option th:each="subject : ${subjects}"
+                        th:value="${subject.subjectId}"
+                        th:text="${subject.subjectName}">
+                </option>
+            </select>
+            <input type="submit" value="EDIT SCORE"/>
+        </form>
+        <!--        <input type="submit" th:href="${'/score/subject/'+ subject.subjectId}" value="ADD/EDIT SCORE"/>-->
+    </div>
+
+    <div th:if="${not #lists.isEmpty(scores)}">
+        <h2>Score List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th><a>Student Id</a></th>
+                <th><a>Subject Id</a></th>
+                <th>Middle Score</th>
+                <th>Final Score</th>
+                <th>Average Score</th>
+            </tr>
+            <tr th:each="score : ${scores}">
+                <td th:text="${score.studentId}">Student ID</td>
+                <td th:text="${score.subjectId}">Subject ID</td>
+                <td th:text="${score.midScore}">Middle Score</td>
+                <td th:text="${score.finalScore}">Final Score</td>
+                <td th:text="${score.averageScore}">Average Score</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
